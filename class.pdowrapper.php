@@ -44,6 +44,7 @@ class DB {
      */
     public static $handler = null;
     private static $prev_handler = null;
+    private static $valid_col_names = null;
     
     /**
      * INIT WRAPPER CLASS
