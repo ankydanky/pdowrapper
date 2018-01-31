@@ -49,6 +49,7 @@ class DB {
      * INIT WRAPPER CLASS
      */
     public static function init() {
+        self::$valid_col_names = "/[a-z0-9_-]+/i";
         $db = new PDO("mysql:host=".MYSQLHOST.";dbname=".MYSQLDB, MYSQLUSER, MYSQLPW);
         $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
         $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
@@ -136,6 +137,9 @@ class DB {
         $qmarks = array();
         $values = array();
         foreach($data as $key => $value) {
+            if (!preg_match(self::$valid_col_names, $key)) {
+                throw new Exeption("Invalid column detected => ".$key);
+            }
             array_push($keys, $key);
             array_push($qmarks, "?");
             array_push($values, $value);
@@ -161,6 +165,9 @@ class DB {
         $keys = array();
         $values = array();
         foreach($data as $key => $val) {
+            if (!preg_match(self::$valid_col_names, $key)) {
+                throw new Exeption("Invalid column detected => ".$key);
+            }
             array_push($keys, "{$key}=?");
             array_push($values, $val);
         }
